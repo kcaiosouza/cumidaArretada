@@ -22,7 +22,7 @@ app.post('/api/v0.1/simpleGetInfoFromBody', (request) => {
 // GET
 app.get('/api/v0.1/simpleReturn', () => {
   return {
-    Retorno: "Simples texto de retorno!"
+    Retorno: "Se chegou aqui segura papai!"
   }
 })
 
@@ -31,5 +31,5 @@ app.get('/api/v0.1/simpleReturn', () => {
 app.listen({
   port: 3333,
 }).then(() => {
-  console.log("HTTP server running!")
+  console.log("HTTP server running on port:3333")
 })
