@@ -10,12 +10,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "@types/uuid": "^9.0.8",
     "tsx": "^4.7.1",
     "typescript": "^5.4.3"
   },
   "dependencies": {
     "fastify": "^4.26.2",
     "mysql2": "^3.9.3",
+    "uuid": "^9.0.1",
     "zod": "^3.22.4"
   }
 }
