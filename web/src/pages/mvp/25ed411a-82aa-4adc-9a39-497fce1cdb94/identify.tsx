@@ -22,39 +22,23 @@ export default function Identify() {
                 </div>
                 <div className="pt-6">
                     <h2 className="font-semibold text-[18px] my-2">O que tu gostou?</h2>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="tempoEspera">Tempo de espera</label>
-                        <input type="text"/>
+                    <div className="flex flex-col justify-between w-full mb-1">
+                        <label htmlFor="tempoEspera">Nome:</label>
+                        <input className="border-2 rounded-md" type="text"/>
                     </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="atendimento">Atendimento</label>
-                        <input type="checkbox" id="atendimento" name="atendimento"/>
+                    <div className="flex flex-col justify-between w-full mb-1">
+                        <label htmlFor="tempoEspera">E-mail:</label>
+                        <input className="border-2 rounded-md" type="text"/>
                     </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="temperaturaPrato">Temperatura do prato</label>
-                        <input type="checkbox" id="temperaturaPrato" name="temperaturaPrato"/>
-                    </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="ingredientes">Ingredientes</label>
-                        <input type="checkbox" id="ingredientes" name="ingredientes"/>
-                    </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="sabor">Sabor</label>
-                        <input type="checkbox" id="sabor" name="sabor"/>
-                    </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="apresentacao">Apresentação</label>
-                        <input type="checkbox" id="apresentacao" name="apresentacao"/>
-                    </div>
-                    <div className="flex justify-between w-full mb-1">
-                        <label htmlFor="inovacaoCriatividade">Inovação e Criatividade</label>
-                        <input type="checkbox" id="inovacaoCriatividade" name="inovacaoCriatividade"/>
+                    <div className="flex flex-col justify-between w-full mb-1">
+                        <label htmlFor="tempoEspera">CPF:</label>
+                        <input className="border-2 rounded-md" type="text"/>
                     </div>
                 </div>
             </form>
-            <Link href="./indentify" className="bg-[#FF7F63] w-full h-12 rounded-full text-white font-semibold text-[15px] flex justify-center items-center">
+            <Link href="./success" className="bg-[#FF7F63] w-full h-12 rounded-full text-white font-semibold text-[15px] flex justify-center items-center">
                 <span>
-                    Enviar avaliação
+                    Me Identificar
                 </span>
             </Link>
         </div>
