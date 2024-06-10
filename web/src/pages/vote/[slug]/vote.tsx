@@ -1,6 +1,14 @@
 import RatingStart from "@/components/svgStartVote";
+import { api } from "@/services/api";
+import { GetServerSideProps } from "next";
 import { Poppins } from 'next/font/google';
 import Link from "next/link";
+import { useRef } from 'react';
+
+
+interface VotePageProps {
+    slug: string;
+}
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -8,14 +16,20 @@ const poppins = Poppins({
   });
   
 
-export default function Vote() {
+export default function Vote({slug}:any) {
+    const formRef = useRef<HTMLFormElement>(null);
+
+    const handleSubmit = () => {
+        if (formRef.current) {
+          formRef.current.submit();
+        }
+      };
   return (
     <main className={`bg-white h-screen w-full ${poppins.className}`}>
-        <div className="flex flex-col justify-between items-center h-full px-5 py-12 md:hidden">
-            <div className="flex flex-col w-full justify-start items-start">
-                <Link href="./" className="font-bold text-[17px]"> &lt; Voltar</Link>
-            </div>
-            <form>
+        <div className="flex flex-col justify-between items-center h-full pt-20 px-5 pb-12 md:hidden">
+            <form ref={formRef} action="./identify" method="GET" className="flex flex-[3] flex-col justify-between">
+            <div>
+
                 <div>
                     <h1 className="font-bold text-[20px]">Experiência geral:</h1>
                     <div className="flex flex-row gap-2">
@@ -24,35 +38,35 @@ export default function Vote() {
                                 <span className="text-[35px]">😡</span>
                                 <span className="leading-[20px]">Paia</span>
                             </label>
-                            <input name="vote" id="paia" type="radio"/>
+                            <input required name="vote" id="paia" type="radio" value={1}/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="peba" className="flex flex-col justify-center items-center">
                                 <span className="text-[35px]">🙁</span>
                                 <span className="leading-[20px]">Peba</span>
                             </label>
-                            <input name="vote" id="peba" type="radio"/>
+                            <input required name="vote" id="peba" type="radio" value={2}/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="marromeno" className="flex flex-col justify-center items-center">
                                 <span className="text-[35px]">😐</span>
                                 <span className="leading-[20px]">Marromeno</span>
                             </label>
-                            <input name="vote" id="marromeno" type="radio"/>
+                            <input required name="vote" id="marromeno" type="radio" value={3}/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="massa" className="flex flex-col justify-center items-center">
                                 <span className="text-[35px]">🙂</span>
                                 <span className="leading-[20px]">Massa</span>
                             </label>
-                            <input name="vote" id="massa" type="radio"/>
+                            <input required name="vote" id="massa" type="radio" value={4}/>
                         </div>
                         <div className="flex flex-col">
                             <label htmlFor="arretado" className="flex flex-col justify-center items-center">
                                 <span className="text-[35px]">😍</span>
                                 <span className="leading-[20px]">Arretado</span>
                             </label>
-                            <input name="vote" id="arretado" type="radio"/>
+                            <input required name="vote" id="arretado" type="radio" value={5}/>
                         </div>
                     </div>
                 </div>
@@ -87,13 +101,25 @@ export default function Vote() {
                         <input type="checkbox" id="inovacaoCriatividade" name="inovacaoCriatividade"/>
                     </div>
                 </div>
+            </div>
+                <div className="bg-[#FF7F63] w-full h-12 rounded-full text-white font-semibold text-[15px] flex justify-center items-center">
+                    <input value="Enviar avaliação" type="submit" />
+                </div>
             </form>
-            <Link href="./identify" className="bg-[#FF7F63] w-full h-12 rounded-full text-white font-semibold text-[15px] flex justify-center items-center">
-                <span>
-                    Enviar avaliação
-                </span>
-            </Link>
         </div>
     </main>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<VotePageProps> = async (context) => {
+    const { slug } = context.params as { slug: string; };
+
+    const { data: restaurantInfo } = await api.get(`/restaurant/${slug}`)
+  
+    return {
+      props: {
+        slug,
+        restaurantInfo: restaurantInfo.restaurant
+      },
+    };
+  }

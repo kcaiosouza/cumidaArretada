@@ -2,9 +2,16 @@ import fastify from "fastify";
 import { z } from "zod"; // Typa e valida variáveis
 import { prismaClient } from "./database/prismaClient";
 import bcrypt from "bcrypt";
+import cors from '@fastify/cors'
 
 const app = fastify();
 const path = "/api/v0.1"
+app.register(cors, { 
+  origin: "*",
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  
+})
+
 // REGEX CPF => ([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})
 // REGEX CNPJ => ([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})
 
@@ -32,7 +39,7 @@ app.post(path + '/vote/:restaurantId', async (request, reply) => {
   }).parse(request.params)
 
   const { userId, rating, waitingTime, service, temperature, ingredient, flavor, presentation, inovation } = z.object({
-    userId: z.string().uuid(),
+    userId: z.string().regex(new RegExp("([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})"), "O campo CPF não é válido"),
     rating: z.number(),
     waitingTime: z.boolean(),
     service: z.boolean(),
@@ -43,22 +50,35 @@ app.post(path + '/vote/:restaurantId', async (request, reply) => {
     inovation: z.boolean(),
   }).parse(request.body)
 
-  const vote = await prismaClient.review.create({
-    data: {
-      restaurant_id: restaurantId,
-      user_id: userId,
-      waiting_time: waitingTime,
-      rating,
-      flavor,
-      ingredient,
-      service,
-      inovation,
-      presentation,
-      temperature
+  const voteExist = await prismaClient.review.findMany({
+    where: {
+      user_id: userId
     }
   })
 
-  return reply.status(201).send(vote)
+  var output = {success: false, message: "Você já avaliou esse restaurante", vote:{} }
+  if(voteExist.length <= 0) {
+    const vote = await prismaClient.review.create({
+      data: {
+        restaurant_id: restaurantId,
+        user_id: userId,
+        waiting_time: waitingTime,
+        rating,
+        flavor,
+        ingredient,
+        service,
+        inovation,
+        presentation,
+        temperature
+      }
+    })
+
+    output.vote = vote
+    output.message = "Avaliado com sucesso!"
+    output.success = true
+  }
+
+  return reply.status(200).send(output)
 })
 
 app.post(path + '/user/login', async (request, reply) => {
@@ -79,6 +99,27 @@ app.post(path + '/user/login', async (request, reply) => {
     output.message = "Um código foi enviado para o email informado"
     output.success = true
     output.user = user
+  }
+
+  return reply.status(200).send(output)
+})
+
+app.get(path + '/restaurant/:id', async (request, reply) => {
+  const { id } = z.object({
+    id: z.string().uuid()
+  }).parse(request.params);
+
+  const restaurant = await prismaClient.restaurant.findUnique({
+    where: {
+      id
+    }
+  })
+
+  var output = {success: false, message: "Não foi encontrado nenhum restaurante com esse ID", restaurant:{} }
+  if(restaurant) {
+    output.message = "Restaurante encontrado"
+    output.success = true
+    output.restaurant = restaurant
   }
 
   return reply.status(200).send(output)
