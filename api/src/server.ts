@@ -52,6 +52,7 @@ app.post(path + '/vote/:restaurantId', async (request, reply) => {
 
   const voteExist = await prismaClient.review.findMany({
     where: {
+      restaurant_id: restaurantId,
       user_id: userId
     }
   })
@@ -99,6 +100,39 @@ app.post(path + '/user/login', async (request, reply) => {
     output.message = "Um código foi enviado para o email informado"
     output.success = true
     output.user = user
+  }
+
+  return reply.status(200).send(output)
+})
+
+app.post(path + '/restaurant/login', async (request, reply) => {
+  const { cnpj, password } = z.object({
+		cnpj: z.string().regex(new RegExp("([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})"), "O campo CNPJ não é válido"),
+    password: z.string(),
+	}).parse(request.body)
+
+console.log(cnpj, password)
+
+  const user = await prismaClient.restaurant.findUnique({
+    where: {
+      cnpj
+    }
+  })
+
+  console.log(user)
+
+  if(!user){
+    return reply.status(404).send({success: false, message: "Não foi encontrado nenhum usuário com as credênciais informadas", user:{} })
+  }
+  
+  var output = {success: false, message: "Não foi encontrado nenhum usuário com as credênciais informadas", user:{} }
+  const resultcomparacao = bcrypt.compareSync(password, user.password)
+  if(resultcomparacao == true){
+    output.message = "Um código foi enviado para o email informado"
+    output.success = true
+    output.user = user
+  }else {
+    output.message = "Senha Incorreta!"
   }
 
   return reply.status(200).send(output)

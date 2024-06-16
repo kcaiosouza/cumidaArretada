@@ -1,13 +1,14 @@
 import Router from "next/router";
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { parseCookies, setCookie } from "nookies";
 import { api } from "@/services/api";
 
 type User = {
     id: string;
     name: string;
-    email: string;
-    cpf: string;
+    cnpj: string;
+    password: string;
+    created_at: any;
 }
 
 type AuthProviderType = {
@@ -15,7 +16,7 @@ type AuthProviderType = {
 }
 
 type SignInData = {
-    cpf: string;
+    cnpj: string;
     password: string;
 }
 
@@ -35,26 +36,27 @@ export function AuthProvider({ children } : AuthProviderType) {
         const { "CumidaArretada.AuthToken" : authToken } = parseCookies();
 
         if(authToken) {
-            // api.post("path/recovery/user", { token: authToken })
-            // .then(({ data : recoveredUser }) => {
-            //     setUser(recoveredUser)
-            // })
+            api.get(`/restaurant/${authToken}`)
+            .then(({ data : recoveredUser }) => {
+                console.log(recoveredUser)
+                setUser(recoveredUser?.restaurant)
+            })
         }
     }, [])
 
-    async function signIn({cpf, password} : SignInData) {
-        // const { data : userInfo } = await api.post("path/url", {
-        //     cpf,
-        //     password,
-        // })
+    async function signIn({cnpj, password} : SignInData) {
+        const { data : userInfo } = await api.post("/restaurant/login", {
+            cnpj,
+            password,
+        })
 
-        // setCookie(undefined, "CumidaArretada.AuthToken", userInfo.token, {
-        //     maxAge: 60 * 60 * 24 * 30, // 30 dias
-        // })
+        setCookie(undefined, "CumidaArretada.AuthToken", userInfo.token, {
+            maxAge: 60 * 60 * 24 * 30, // 30 dias
+        })
 
-        // api.defaults.headers['Authorization'] = `Bearer ${authToken}`
+        api.defaults.headers['Authorization'] = `Bearer ${userInfo.token}`
 
-        // setUser(userInfo)
+        setUser(userInfo)
 
         Router.push("/dashboard")
     }
@@ -65,3 +67,7 @@ export function AuthProvider({ children } : AuthProviderType) {
         </AuthContext.Provider>
     )
 }
+
+export const useAuth = () => {
+    return useContext(AuthContext);
+  }
