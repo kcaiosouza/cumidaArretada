@@ -111,7 +111,7 @@ app.post(path + '/restaurant/login', async (request, reply) => {
     password: z.string(),
 	}).parse(request.body)
 
-console.log(cnpj, password)
+// console.log(cnpj, password)
 
   const user = await prismaClient.restaurant.findUnique({
     where: {
@@ -119,7 +119,7 @@ console.log(cnpj, password)
     }
   })
 
-  console.log(user)
+  // console.log(user)
 
   if(!user){
     return reply.status(404).send({success: false, message: "Não foi encontrado nenhum usuário com as credênciais informadas", user:{} })
@@ -157,6 +157,25 @@ app.get(path + '/restaurant/:id', async (request, reply) => {
   }
 
   return reply.status(200).send(output)
+})
+
+app.get(path + '/vote/getAll', async (request, reply) => {
+  const votes = await prismaClient.review.findMany()
+  return reply.status(200).send(votes)
+})
+
+app.get(path + '/votes/:id', async (request, reply) => {
+  const { id } = z.object({
+    id: z.string().uuid()
+  }).parse(request.params);
+
+  const votes = await prismaClient.review.findMany({
+    where: {
+      restaurant_id: id
+    }
+  })
+  
+  return reply.status(200).send(votes)
 })
 
 app.post(path + '/user/signup', async (request, reply) => {
