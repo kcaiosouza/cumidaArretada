@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/services/api";
 import { GetServerSideProps } from "next"
+import Link from "next/link";
 import { destroyCookie, parseCookies } from "nookies";
 
 interface Review {
@@ -73,10 +74,10 @@ export default function Dashboard({infoPage}:any) {
                         
                     </div>
                     <div className="flex-shrink-0">
-                        <a href="#" className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-orange-700 sm:text-sm hover:bg-gray-100 dark:text-orange-500 dark:hover:bg-gray-700">
+                        <Link href="#" className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-orange-700 sm:text-sm hover:bg-gray-100 dark:text-orange-500 dark:hover:bg-gray-700">
                         Detalhar (EM BREVE)
                         <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-                        </a>
+                        </Link>
                     </div>
                     </div>
                 </div>

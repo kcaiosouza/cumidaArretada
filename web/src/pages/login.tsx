@@ -1,5 +1,6 @@
 import { api } from "@/services/api";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import { parseCookies, setCookie } from "nookies";
 import { useForm } from 'react-hook-form';
 import ReactInputMask from "react-input-mask";
@@ -8,9 +9,9 @@ export default function Login() {
     const {register, handleSubmit} = useForm();
   return (
     <div className="flex flex-col items-center justify-center px-6 pt-8 mx-auto md:h-screen pt:mt-0 dark:bg-gray-900">
-    <a className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
+    <Link href="/" className="flex items-center justify-center mb-8 text-2xl font-semibold lg:mb-10 dark:text-white">
         <span>Cumida Arretada</span>  
-    </a>
+    </Link>
     <div className="w-full max-w-xl p-6 space-y-8 sm:p-8 bg-white rounded-lg shadow dark:bg-gray-800">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Login

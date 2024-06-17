@@ -1,14 +1,16 @@
+import Link from "next/link";
+
 export default function MyPage() {
   return (
     <>
     <header className="fixed w-full">
         <nav className="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
             <div className="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
-                <a href="#" className="flex items-center">
+                <Link href="#" className="flex items-center">
                     <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Cumida Arretada</span>
-                </a>
+                </Link>
                 <div className="flex items-center lg:order-2">
-                    <a href="/login" className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Fazer Login</a>
+                    <Link href="/login" className="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Fazer Login</Link>
                 </div>
             </div>
         </nav>
@@ -21,9 +23,9 @@ export default function MyPage() {
                 <span className="font-light text-[20px]">Powered by: Unifacisa</span>
                 <p className="max-w-2xl mt-3 mb-6 font-light text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">Participe do Concurso Gastronômico "Cumida Arretada" e explore a riqueza dos sabores nordestinos! Esse evento celebra a culinária típica da região, reunindo chefs talentosos e amantes da boa comida. Venha saborear pratos incríveis, repletos de tradição e inovação, e vote no seu favorito. Não perca essa experiência gastronômica única!</p>
                 <div className="space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
-                    <a href="/ranking" className="inline-flex items-center justify-center w-full px-5 py-3 text-sm font-medium text-center text-gray-900 border border-gray-200 rounded-lg sm:w-auto hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
+                    <Link href="/ranking" className="inline-flex items-center justify-center w-full px-5 py-3 text-sm font-medium text-center text-gray-900 border border-gray-200 rounded-lg sm:w-auto hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-800">
                         Ver ranking
-                    </a> 
+                    </Link> 
                 </div>
             </div>
             <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
@@ -60,9 +62,9 @@ export default function MyPage() {
     <footer className="bg-white dark:bg-gray-800">
         <div className="max-w-screen-xl p-4 py-6 mx-auto lg:py-16 md:p-8 lg:p-10">
             <div className="text-center">
-                <a href="#" className="flex items-center justify-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
+                <Link href="#" className="flex items-center justify-center mb-5 text-2xl font-semibold text-gray-900 dark:text-white">
                     Cumida Arretada
-                </a>
+                </Link>
                 <span className="block text-sm text-center text-gray-500 dark:text-gray-400">© 2024 Cumida Arretada™. Direitos Reservados!
                 </span>
             </div>
