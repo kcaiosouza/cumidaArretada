@@ -38,7 +38,7 @@ export function AuthProvider({ children } : AuthProviderType) {
         if(authToken) {
             api.get(`/restaurant/${authToken}`)
             .then(({ data : recoveredUser }) => {
-                console.log(recoveredUser)
+                // console.log(recoveredUser)
                 setUser(recoveredUser?.restaurant)
             })
         }
