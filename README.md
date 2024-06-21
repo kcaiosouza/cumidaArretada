@@ -6,7 +6,7 @@ Cumida Arretada é um concurso gastronômico, onde os restaurantes criam um prat
 
 - Next.JS (Front)
 - Node.JS (Back)
-- MySQL (Database)
+- PostgreSQL (Database)
 
 
 ## ✨ Powered by
