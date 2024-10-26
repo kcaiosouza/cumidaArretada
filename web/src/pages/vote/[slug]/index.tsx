@@ -18,7 +18,7 @@ const poppins = Poppins({
 export default function Index({slug, restaurantInfo}: any) {
   return (
     <main className={`bg-white h-screen w-full ${poppins.className}`}>
-        <div className={`hidden text-black md:flex`}>
+        <div className={`hidden text-black md:flex md:items-center md:justify-center md:h-screen`}>
             Avaliação de Restaurantes está disponível apenas para dispositivos móveis
         </div>
         <div className="flex flex-col justify-between items-center h-full px-5 py-12 md:hidden">

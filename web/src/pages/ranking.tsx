@@ -40,24 +40,25 @@ export default function Ranking({averageRatings}:any) {
                     </Link>
                 </div>
             </nav>
-
-            <div className="bg-white shadow-md rounded-md overflow-hidden max-w-lg mx-6 mt-24">
-                <div className="bg-orange-500 py-2 px-4">
-                    <h2 className="text-xl font-bold text-white">Top Restaurantes</h2>
+            <div className="flex justify-center min-w-80">
+                <div className="bg-white shadow-md rounded-md overflow-hidden w-full max-w-lg mx-6 mt-24">
+                    <div className="bg-orange-500 py-2 px-4">
+                        <h2 className="text-xl font-bold text-white">Top Restaurantes</h2>
+                    </div>
+                    <ul className="divide-y divide-gray-200">
+                        {averageRatings.map((item:any, index:number) => {
+                            return(
+                                <li key={item.restaurant_id} className="flex items-center py-4 px-6">
+                                    <span className="text-gray-700 text-lg font-medium mr-4">{index+1}.</span>
+                                        <div className="flex-1">
+                                            <h3 className="text-lg font-medium text-gray-800">{item.restaurant_name}</h3>
+                                            <p className="text-gray-600 text-base">Nota: {(item.average_rating).toFixed(2)} ⭐</p>
+                                        </div>
+                                </li>
+                            )
+                        })}
+                    </ul>
                 </div>
-                <ul className="divide-y divide-gray-200">
-                    {averageRatings.map((item:any, index:number) => {
-                        return(
-                            <li key={item.restaurant_id} className="flex items-center py-4 px-6">
-                                <span className="text-gray-700 text-lg font-medium mr-4">{index+1}.</span>
-                                    <div className="flex-1">
-                                        <h3 className="text-lg font-medium text-gray-800">{item.restaurant_name}</h3>
-                                        <p className="text-gray-600 text-base">Nota: {(item.average_rating).toFixed(2)} ⭐</p>
-                                    </div>
-                            </li>
-                        )
-                    })}
-                </ul>
             </div>
         </>
     )

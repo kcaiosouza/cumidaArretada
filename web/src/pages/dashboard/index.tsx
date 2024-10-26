@@ -1,8 +1,11 @@
+import { useRef } from "react";
+import Link from "next/link";
+import { GetServerSideProps } from "next"
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/services/api";
-import { GetServerSideProps } from "next"
-import Link from "next/link";
 import { destroyCookie, parseCookies } from "nookies";
+import QRCode from "react-qr-code";
+import { toPng } from "html-to-image";
 
 interface Review {
     id: number;
@@ -31,7 +34,17 @@ interface Summary {
 
 export default function Dashboard({infoPage}:any) {
     const { user } = useAuth();
-    console.log(infoPage)
+    const qrCodeRef = useRef(null);
+
+    const handleDownload = async () => {
+        if (qrCodeRef.current === null) return;
+    
+        const dataUrl = await toPng(qrCodeRef.current);
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `qrcode_${(user?.name)?.replaceAll(" ", "_")}.png`;
+        link.click();
+      };
     return(
         <>
             <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600">
@@ -67,19 +80,6 @@ export default function Dashboard({infoPage}:any) {
                     </div>
                     </div>
                     <div id="main-chart"></div>
-                    
-                    <div className="flex items-center justify-between pt-3 mt-4 border-t border-gray-200 sm:pt-6 dark:border-gray-700">
-                    <div>
-                        <button className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 rounded-lg hover:text-gray-900 dark:text-gray-400 dark:hover:text-white" type="button" data-dropdown-toggle="weekly-sales-dropdown">MAIS (EM BREVE) <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg></button>
-                        
-                    </div>
-                    <div className="flex-shrink-0">
-                        <Link href="#" className="inline-flex items-center p-2 text-xs font-medium uppercase rounded-lg text-orange-700 sm:text-sm hover:bg-gray-100 dark:text-orange-500 dark:hover:bg-gray-700">
-                        Detalhar (EM BREVE)
-                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
-                        </Link>
-                    </div>
-                    </div>
                 </div>
                 
                 </div>
@@ -100,10 +100,28 @@ export default function Dashboard({infoPage}:any) {
                     </div>
                     <div className="w-full" id="new-products-chart"></div>
                 </div>
+                <div className="items-center flex-col justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                    <div className="flex w-full items-start justify-start">
+                        <h3 className="text-base font-normal text-gray-500 dark:text-gray-400">Seu QRCode</h3>
+                    </div>
+                    <div className="w-full justify-center flex" ref={qrCodeRef}>
+                    { user?.id ? 
+                    <QRCode
+                        size={256}
+                        style={{ height: "180px", maxWidth: "auto", width: "auto" }}
+                        value={`https://cumidaarretada.vercel.app/vote/${user.id}`}
+                        viewBox={`0 0 183 183`}
+                    />
+                    : "" }
+                    </div>
+                    <div className="w-full" id="new-products-chart">
+                        <button onClick={handleDownload} className="w-full mt-8 text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-orange-600 dark:hover:bg-orange-700 focus:outline-none dark:focus:ring-orange-800">Download</button>
+                    </div>
+                </div>
                 <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:flex dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div className="w-full">
                     <h3 className="text-base font-normal text-gray-500 dark:text-gray-400">Avaliação média</h3>
-                    <span className="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{(infoPage[0].mediaVotes).toFixed(2)}</span>
+                    <span className="text-2xl font-bold leading-none text-gray-900 sm:text-3xl dark:text-white">{infoPage[0].mediaVotes ? (infoPage[0].mediaVotes).toFixed(2) : "0"}</span>
                     <p className="flex items-center text-base font-normal text-gray-500 dark:text-gray-400">
                         <span className="flex items-center mr-1.5 text-sm text-green-500 dark:text-green-400">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -116,7 +134,8 @@ export default function Dashboard({infoPage}:any) {
                     </div>
                     <div className="w-full" id="week-signups-chart"></div>
                 </div>
-                <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
+                </div>
+                <div className="p-4 mt-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
                     <div className="w-full">
                     <h3 className="mb-2 text-base font-normal text-gray-500 dark:text-gray-400">Votos por nota</h3>
                     <div className="flex items-center mb-2">
@@ -150,7 +169,6 @@ export default function Dashboard({infoPage}:any) {
                         </div>
                     </div>
                     </div>
-                </div>
                 </div>
             </div>
         </>
